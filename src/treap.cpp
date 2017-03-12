@@ -57,6 +57,7 @@ void TreapNode::push() {
     if (toAdd_) {
         addValue(leftChild_, toAdd_);
         addValue(rightChild_, toAdd_);
+        toAdd_ = 0;
     }
 }
 

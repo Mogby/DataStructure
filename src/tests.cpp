@@ -157,7 +157,7 @@ TEST_F(DataStructureTest, GetSumCorrectness) {
     }
 }
 
-/*TEST_F(DataStructureTest, AssignOnSegmentCorrectness) {
+TEST_F(DataStructureTest, AssignOnSegmentCorrectness) {
     srand(3);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
@@ -181,6 +181,10 @@ TEST_F(DataStructureTest, GetSumCorrectness) {
             values[index] = newValue;
         }
     }
+
+    for (int index = 0; index < TEST_SIZE; ++index) {
+        EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+    }
 }
 
 TEST_F(DataStructureTest, AddOnSegmentCorrectness) {
@@ -188,8 +192,10 @@ TEST_F(DataStructureTest, AddOnSegmentCorrectness) {
 
     for (int count = 0; count < TEST_SIZE; ++count) {
         dataStructure.add(0, 0);
+        values.push_back(0);
     }
 
+    ValueType deltaValue;
     int leftBound, rightBound;
     for (int count = 0; count < TEST_SIZE; ++count) {
         leftBound = rand() % TEST_SIZE;
@@ -199,6 +205,55 @@ TEST_F(DataStructureTest, AddOnSegmentCorrectness) {
             std::swap(leftBound, rightBound);
         }
 
-        dataStructure.addOnSegment(rand() - RAND_MAX / 2, leftBound, rightBound);
+        deltaValue = rand() - RAND_MAX / 2;
+        dataStructure.addOnSegment(deltaValue, leftBound, rightBound);
+        for (int index = leftBound; index <= rightBound; ++index) {
+            values[index] += deltaValue;
+        }
     }
-}*/
+
+    for (int index = 0; index < TEST_SIZE; ++index) {
+        EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+    }
+}
+
+TEST_F(DataStructureTest, CombinedTest) {
+    srand(73);
+
+    ValueType newValue;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        newValue = rand();
+        dataStructure.add(newValue, count);
+        values.push_back(0);
+    }
+
+    ValueType deltaValue;
+    int leftBound, rightBound, operationType;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        leftBound = rand() % TEST_SIZE;
+        rightBound = rand() % TEST_SIZE;
+        operationType = rand() % 2;
+
+        if (leftBound > rightBound) {
+            std::swap(leftBound, rightBound);
+        }
+
+        if (operationType == 1) {
+            deltaValue = rand() - RAND_MAX / 2;
+            dataStructure.addOnSegment(deltaValue, leftBound, rightBound);
+            for (int index = leftBound; index <= rightBound; ++index) {
+                values[index] += deltaValue;
+            }
+        } else {
+            newValue = rand();
+            dataStructure.assignOnSegment(newValue, leftBound, rightBound);
+            for (int index = leftBound; index <= rightBound; ++index) {
+                values[index] = newValue;
+            }
+        }
+    }
+
+    for (int index = 0; index < TEST_SIZE; ++index) {
+        EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+    }
+}
