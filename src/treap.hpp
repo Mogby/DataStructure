@@ -13,6 +13,10 @@ private:
     ValueType sum_;
     uint priority_;
 
+    ValueType toAdd_;
+    ValueType toAssign_;
+    bool needAssign;
+
     int size_;
 
     TreapNode *leftChild_, *rightChild_;
@@ -20,6 +24,10 @@ private:
     ValueType getSum(TreapNode *node);
 
     int getSize(TreapNode *node);
+
+    void addValue(TreapNode *node, ValueType value);
+
+    void assignValue(TreapNode *node, ValueType value);
 
 public:
 
@@ -32,11 +40,15 @@ public:
 
     void update();
 
+    void push();
+
+    void addOnSubtree(ValueType value);
+
+    void assignOnSubtree(ValueType value);
+
     void assignLeftChild(TreapNode *newLeftChild);
 
     void assignRightChild(TreapNode *newRightChild);
-
-    ValueType getValue();
 
     ValueType getSubtreeSum();
 

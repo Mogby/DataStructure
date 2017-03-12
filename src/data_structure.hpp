@@ -21,11 +21,24 @@ private:
 
     };
 
+    struct NodeTriplet {
+        TreapNode *left;
+        TreapNode *middle;
+        TreapNode *right;
+
+        NodeTriplet(TreapNode *leftNode = nullptr, TreapNode *middleNode = nullptr,
+                    TreapNode *rightNode = nullptr) : left(leftNode), middle(middleNode), right(rightNode) {}
+    };
+
     TreapNode *treap_;
 
     TreapNode* merge(TreapNode *leftNode, TreapNode *rightNode);
 
+    TreapNode* merge(TreapNode *leftNode, TreapNode *middleNode, TreapNode *rightNode);
+
     NodePair split(TreapNode *treap, int index);
+
+    NodeTriplet split(TreapNode *treap, int leftIndex, int rightIndex);
 
 public:
 
@@ -35,7 +48,9 @@ public:
 
     void add(ValueType value, int index);
 
-    void assignOnSubsegment(ValueType value, int leftBound, int rightBound);
+    void addOnSegment(ValueType value, int leftBound, int rightBound);
+
+    void assignOnSegment(ValueType value, int leftBound, int rightBound);
 
     void remove(int index);
 

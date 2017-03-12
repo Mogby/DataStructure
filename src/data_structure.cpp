@@ -9,6 +9,9 @@ TreapNode* DataStructure::merge(TreapNode *leftNode, TreapNode *rightNode) {
     if (!rightNode)
         return leftNode;
 
+    leftNode->push();
+    rightNode->push();
+
     if (leftNode->getPriority() > rightNode->getPriority()) {
         leftNode->assignRightChild(merge(leftNode->getRightChild(),
                                          rightNode));
@@ -20,10 +23,16 @@ TreapNode* DataStructure::merge(TreapNode *leftNode, TreapNode *rightNode) {
     }
 }
 
+TreapNode* DataStructure::merge(TreapNode *leftNode, TreapNode *middleNode, TreapNode *rightNode) {
+    return merge(leftNode, merge(middleNode, rightNode));
+}
+
 DataStructure::NodePair DataStructure::split(TreapNode *treap, int index) {
     if (!treap) {
         return NodePair();
     }
+
+    treap->push();
 
     NodePair cut;
     if (treap->getLeftChildSize() > index) {
@@ -37,6 +46,13 @@ DataStructure::NodePair DataStructure::split(TreapNode *treap, int index) {
     }
 }
 
+DataStructure::NodeTriplet DataStructure::split(TreapNode *treap, int leftIndex, int rightIndex) {
+    NodePair firstCut = split(treap, rightIndex);
+    NodePair secondCut = split(firstCut.left, leftIndex - 1);
+
+    return NodeTriplet(secondCut.left, secondCut.right, firstCut.right);
+}
+
 DataStructure::DataStructure() : treap_(nullptr) {}
 
 DataStructure::~DataStructure() {
@@ -47,25 +63,39 @@ void DataStructure::add(ValueType value, int index) {
     TreapNode *newNode = new TreapNode(value);
 
     NodePair cut = split(treap_, index - 1);
-    treap_ = merge(cut.left, merge(newNode, cut.right));
+    treap_ = merge(cut.left, newNode, cut.right);
+}
+
+void DataStructure::addOnSegment(ValueType value, int leftBound, int rightBound) {
+    NodeTriplet segments = split(treap_, leftBound, rightBound);
+
+    segments.middle->addOnSubtree(value);
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
+}
+
+void DataStructure::assignOnSegment(ValueType value, int leftBound, int rightBound) {
+    NodeTriplet segments = split(treap_, leftBound, rightBound);
+
+    segments.middle->assignOnSubtree(value);
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
 }
 
 void DataStructure::remove(int index) {
-    NodePair firstCut = split(treap_, index);
-    NodePair secondCut = split(firstCut.left, index - 1);
+    NodeTriplet segments = split(treap_, index, index);
 
-    delete secondCut.right;
+    delete segments.middle;
 
-    treap_ = merge(secondCut.left, firstCut.right);
+    treap_ = merge(segments.left, segments.right);
 }
 
 ValueType DataStructure::getSum(int leftBound, int rightBound) {
-    NodePair firstCut = split(treap_, rightBound);
-    NodePair secondCut = split(firstCut.left, leftBound - 1);
+    NodeTriplet segments = split(treap_, leftBound, rightBound);
 
-    ValueType result = secondCut.right ? secondCut.right->getSubtreeSum() : 0;
+    ValueType result = segments.middle ? segments.middle->getSubtreeSum() : 0;
 
-    treap_ = merge(secondCut.left, merge(secondCut.right, firstCut.right));
+    treap_ = merge(segments.left, segments.middle, segments.right);
 
     return result;
 }
