@@ -50,7 +50,7 @@ DataStructure::NodePair DataStructure::split(TreapNode *treap, SplitPredicate &p
 }
 
 DataStructure::NodePair DataStructure::split(TreapNode *treap, SplitPredicate &&predicate) {
-    split(treap, predicate);
+    return split(treap, predicate);
 }
 
 DataStructure::NodeTriplet DataStructure::splitTwice(TreapNode *treap, int leftIndex, int rightIndex) {
