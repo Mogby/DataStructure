@@ -8,6 +8,8 @@
 
 class TreapNode;
 
+class SplitPredicate;
+
 class DataStructure {
 private:
 
@@ -36,9 +38,11 @@ private:
 
     TreapNode* merge(TreapNode *leftNode, TreapNode *middleNode, TreapNode *rightNode);
 
-    NodePair split(TreapNode *treap, int index);
+    NodePair split(TreapNode *treap, SplitPredicate &predicate);
 
-    NodeTriplet split(TreapNode *treap, int leftIndex, int rightIndex);
+    NodePair split(TreapNode *treap, SplitPredicate &&predicate);
+
+    NodeTriplet splitTwice(TreapNode *treap, int leftIndex, int rightIndex);
 
 public:
 

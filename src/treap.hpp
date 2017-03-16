@@ -13,6 +13,11 @@ private:
     ValueType sum_;
     uint priority_;
 
+    bool isMonotonous_;
+
+    ValueType leftmostValue_;
+    ValueType rightmostValue_;
+
     ValueType toAdd_;
     ValueType toAssign_;
     bool needAssign;
@@ -21,15 +26,25 @@ private:
 
     TreapNode *leftChild_, *rightChild_;
 
-    ValueType getSum(TreapNode *node);
-
-    int getSize(TreapNode *node);
-
     void addValue(TreapNode *node, ValueType value);
 
     void assignValue(TreapNode *node, ValueType value);
 
+    bool checkMonotonous(const TreapNode *leftNode, ValueType value, const TreapNode *rightNode) const;
+
 public:
+
+    static ValueType getSum(const TreapNode *node);
+
+    static int getSize(const TreapNode *node);
+
+    static ValueType getLeftmostValue(const TreapNode *node, ValueType defaultValue);
+
+    static ValueType getRightmostValue(const TreapNode *node, ValueType defaultValue);
+
+    static bool isAscending(const TreapNode *node, bool defaultValue);
+
+    static bool isDescending(const TreapNode *node, bool defaultValue);
 
     TreapNode();
 
@@ -50,16 +65,17 @@ public:
 
     void assignRightChild(TreapNode *newRightChild);
 
-    ValueType getSubtreeSum();
+    ValueType getValue() const;
 
-    uint getPriority();
-
-    int getLeftChildSize();
+    uint getPriority() const;
 
     TreapNode* getLeftChild();
 
+    const TreapNode* getLeftChild() const;
+
     TreapNode* getRightChild();
 
+    const TreapNode* getRightChild() const;
 };
 
 #endif

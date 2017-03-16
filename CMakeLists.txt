@@ -7,7 +7,7 @@ include_directories(include)
 
 link_directories(lib)
 
-set(SOURCE_FILES src/main.cpp src/data_structure.cpp src/treap.cpp src/tests.cpp)
+set(SOURCE_FILES src/main.cpp src/data_structure.cpp src/treap.cpp src/tests.cpp src/split_predicate.cpp src/split_predicate.hpp)
 add_executable(DataStructure ${SOURCE_FILES})
 
 target_link_libraries(DataStructure libgtest_main.a libgtest.a pthread)
