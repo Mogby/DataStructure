@@ -7,7 +7,10 @@ include_directories(include)
 
 link_directories(lib)
 
-set(SOURCE_FILES src/main.cpp src/data_structure.cpp src/treap.cpp src/tests.cpp src/split_predicate.cpp src/split_predicate.hpp)
-add_executable(DataStructure ${SOURCE_FILES})
+set(SOURCE_FILES src/data_structure.cpp src/treap.cpp src/split_predicate.cpp src/split_predicate.hpp)
+set(TEST_FILES src/main.cpp src/tests.cpp)
 
-target_link_libraries(DataStructure libgtest_main.a libgtest.a pthread)
+add_library(data_structure ${SOURCE_FILES})
+add_executable(tests ${TEST_FILES})
+
+target_link_libraries(tests data_structure libgtest_main.a libgtest.a pthread)
