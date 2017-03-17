@@ -12,27 +12,42 @@ void ImplicitKeySplit::goRight(const TreapNode &node) {
 ImplicitKeySplit::ImplicitKeySplit(int key) : key_(key) {}
 
 bool ExplicitKeySplit::operator()(const TreapNode &node) {
-    return node.getValue() > key_;
+    return node.getValue() != key_ && (node.getValue() > key_ == ascendingTree_);
 }
 
-ExplicitKeySplit::ExplicitKeySplit(ValueType key) : key_(key) {}
+ExplicitKeySplit::ExplicitKeySplit(ValueType key, bool ascendingTree) : key_(key), ascendingTree_(ascendingTree) {}
 
-/*bool AscendingSplit::operator()(const TreapNode &node) {
-    if (!TreapNode::isAscending(node.getRightChild(), true) ||
-            node.getValue() > TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
+bool AscendingSplit::operator()(const TreapNode &node) {
+    if (alwaysFalse_) {
         return false;
     }
 
-    return TreapNode::isAscending(node.getLeftChild(), true) &&
-            TreapNode::getRightmostValue(node.getLeftChild(), node.getValue()) <= node.getValue();
+    if (!TreapNode::isAscending(node.getRightChild(), true) ||
+        node.getValue() > TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
+        return false;
+    }
+
+    if (TreapNode::getLeftmostValue(node.getLeftChild(), node.getValue()) > node.getValue()) {
+        alwaysFalse_ = true;
+    }
+
+    return true;
 }
 
 bool DescendingSplit::operator()(const TreapNode &node) {
-    if (!TreapNode::isDescending(node.getRightChild(), true) ||
-            node.getValue() < TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
+    if (alwaysFalse_) {
         return false;
     }
 
-    return TreapNode::isDescending(node.getLeftChild(), false) &&
+    if (!TreapNode::isDescending(node.getRightChild(), true) ||
+        node.getValue() < TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
+        return false;
+    }
 
-}*/
+    if (TreapNode::getRightmostValue(node.getLeftChild(), node.getValue()) < node.getValue()) {
+        alwaysFalse_ = true;
+    }
+
+    return true;
+
+}

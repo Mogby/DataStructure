@@ -1,6 +1,5 @@
 #include "treap.hpp"
 
-#include <cstdlib>
 #include <utility>
 
 void TreapNode::addValue(TreapNode *node, ValueType value) {
@@ -159,4 +158,15 @@ TreapNode* TreapNode::getRightChild() {
 
 const TreapNode* TreapNode::getRightChild() const {
     return rightChild_;
+}
+
+std::ostream& operator<<(std::ostream &output, const TreapNode &node) {
+    if (node.getLeftChild()) {
+        output << *(node.getLeftChild());
+    }
+    output << node.getValue() << ' ';
+    if (node.getRightChild()) {
+        output << *(node.getRightChild());
+    }
+    return output;
 }

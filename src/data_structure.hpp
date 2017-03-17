@@ -4,6 +4,7 @@
 
 #define DATA_STRUCTURE_HPP
 
+#include <ostream>
 #include "typedefs.hpp"
 
 class TreapNode;
@@ -58,10 +59,15 @@ public:
 
     void reverseOnSegment(int leftBound, int rightBound);
 
+    void nextPermutationOnSegment(int leftBound, int rightBound);
+
+    void previousPermutationOnSegment(int leftBound, int rightBound);
+
     void remove(int index);
 
     ValueType getSum(int leftBound, int rightBound);
 
+    void printSegment(std::ostream &output, int leftBound, int rightBound);
 };
 
 #endif

@@ -4,6 +4,7 @@
 
 #define TREAP_HPP
 
+#include <iostream>
 #include "typedefs.hpp"
 
 class TreapNode {
@@ -82,5 +83,7 @@ public:
 
     const TreapNode* getRightChild() const;
 };
+
+std::ostream& operator<<(std::ostream &output, const TreapNode &node);
 
 #endif

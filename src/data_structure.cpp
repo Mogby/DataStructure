@@ -97,6 +97,31 @@ void DataStructure::reverseOnSegment(int leftBound, int rightBound) {
     treap_ = merge(segments.left, segments.middle, segments.right);
 }
 
+void printNode(TreapNode *node) {
+    if (node) {
+        std::cout << *node << "; ";
+    } else {
+        std::cout << "---; ";
+    }
+}
+
+void DataStructure::nextPermutationOnSegment(int leftBound, int rightBound) {
+    NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
+
+    if (!TreapNode::isDescending(segments.middle, true)) {
+        NodePair segmentParts = split(segments.middle, DescendingSplit());
+        NodePair swapFrom = split(segmentParts.left, ImplicitKeySplit(TreapNode::getSize(segmentParts.left) - 2));
+        NodePair swapTo = split(segmentParts.right, ExplicitKeySplit(swapFrom.right->getValue() + 1, false));
+        NodePair newElement = split(swapTo.left, ImplicitKeySplit(TreapNode::getSize(swapTo.left) - 2));
+
+        segments.middle = merge(newElement.left, swapFrom.right, swapTo.right);
+        segments.middle->reverseSubtree();
+        segments.middle = merge(swapFrom.left, newElement.right, segments.middle);
+    }
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
+}
+
 void DataStructure::remove(int index) {
     NodeTriplet segments = splitTwice(treap_, index, index);
 
@@ -113,4 +138,12 @@ ValueType DataStructure::getSum(int leftBound, int rightBound) {
     treap_ = merge(segments.left, segments.middle, segments.right);
 
     return result;
+}
+
+void DataStructure::printSegment(std::ostream &output, int leftBound, int rightBound) {
+    NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
+
+    output << *segments.middle;
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
 }

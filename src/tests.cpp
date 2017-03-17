@@ -1,6 +1,8 @@
 #include <cstdlib>
+#include <iostream>
 #include <vector>
 #include <utility>
+#include <algorithm>
 
 #include <gtest/gtest.h>
 
@@ -109,6 +111,25 @@ TEST_F(DataStructureTest, ReverseOnSegmentTest) {
         }
 
         dataStructure.reverseOnSegment(leftBound, rightBound);
+    }
+}
+
+TEST_F(DataStructureTest, NextPermutationOnSegmentTest) {
+    srand(9000);
+
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        dataStructure.add(rand(), count);
+    }
+
+    int leftBound, size, iterations;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        leftBound = rand() % (TEST_SIZE - 6);
+        size = rand() % 6 + 1;
+        iterations = rand() % 10 + 1;
+
+        for (int iterationsCount = 0; iterationsCount < iterations; ++iterationsCount) {
+            dataStructure.nextPermutationOnSegment(leftBound, leftBound + size - 1);
+        }
     }
 }
 
@@ -267,7 +288,7 @@ TEST_F(DataStructureTest, ReverseOnSegmentCorrectness) {
     }
 }
 
-TEST_F(DataStructureTest, CombinedTest) {
+TEST_F(DataStructureTest, CombinedCorrectness) {
     srand(73);
 
     ValueType newValue;
@@ -310,5 +331,25 @@ TEST_F(DataStructureTest, CombinedTest) {
 
     for (int index = 0; index < TEST_SIZE; ++index) {
         EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+    }
+}
+
+TEST_F(DataStructureTest, NextPermutationCorrectness) {
+    int testSize = 6;
+    int permutationsCount = 719;
+
+    for (ValueType count = 0; count < testSize; ++count) {
+        dataStructure.add(count, count);
+        values.push_back(count);
+    }
+
+    for (int iteration = 0; iteration < permutationsCount; ++iteration) {
+        dataStructure.nextPermutationOnSegment(0, testSize - 1);
+
+        std::next_permutation(values.begin(), values.end());
+
+        for (int index = 0; index < testSize; ++index) {
+            EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+        }
     }
 }

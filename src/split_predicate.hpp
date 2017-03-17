@@ -38,25 +38,40 @@ private:
 
     ValueType key_;
 
+    bool ascendingTree_;
+
 public:
 
     virtual bool operator()(const TreapNode &node) override;
 
-    ExplicitKeySplit(ValueType key);
+    ExplicitKeySplit(ValueType key, bool ascendingTree);
 
 };
 
-/*class AscendingSplit : public SplitPredicate {
+class AscendingSplit : public SplitPredicate {
+private:
+
+    bool alwaysFalse_;
+
 public:
+
+    AscendingSplit() : alwaysFalse_(false) {}
 
     virtual bool operator()(const TreapNode &node) override;
 
 };
 
 class DescendingSplit : public SplitPredicate {
+private:
+
+    bool alwaysFalse_;
+
+public:
+
+    DescendingSplit() : alwaysFalse_(false) {}
 
     virtual bool operator()(const TreapNode &node) override;
 
-};*/
+};
 
 #endif
