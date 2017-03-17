@@ -89,6 +89,14 @@ void DataStructure::assignOnSegment(ValueType value, int leftBound, int rightBou
     treap_ = merge(segments.left, segments.middle, segments.right);
 }
 
+void DataStructure::reverseOnSegment(int leftBound, int rightBound) {
+    NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
+
+    segments.middle->reverseSubtree();
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
+}
+
 void DataStructure::remove(int index) {
     NodeTriplet segments = splitTwice(treap_, index, index);
 

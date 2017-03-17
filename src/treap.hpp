@@ -21,6 +21,7 @@ private:
     ValueType toAdd_;
     ValueType toAssign_;
     bool needAssign;
+    bool needReverse;
 
     int size_;
 
@@ -29,6 +30,8 @@ private:
     void addValue(TreapNode *node, ValueType value);
 
     void assignValue(TreapNode *node, ValueType value);
+
+    void reverse(TreapNode *node);
 
     bool checkMonotonous(const TreapNode *leftNode, ValueType value, const TreapNode *rightNode) const;
 
@@ -60,6 +63,8 @@ public:
     void addOnSubtree(ValueType value);
 
     void assignOnSubtree(ValueType value);
+
+    void reverseSubtree();
 
     void assignLeftChild(TreapNode *newLeftChild);
 

@@ -1,6 +1,7 @@
 #include "treap.hpp"
 
 #include <cstdlib>
+#include <utility>
 
 void TreapNode::addValue(TreapNode *node, ValueType value) {
     if (node) {
@@ -11,6 +12,12 @@ void TreapNode::addValue(TreapNode *node, ValueType value) {
 void TreapNode::assignValue(TreapNode *node, ValueType value) {
     if (node) {
         node->assignOnSubtree(value);
+    }
+}
+
+void TreapNode::reverse(TreapNode *node) {
+    if (node) {
+        node->reverseSubtree();
     }
 }
 
@@ -60,6 +67,7 @@ TreapNode::TreapNode(ValueType value, TreapNode *leftChild,
 
     toAdd_ = 0;
     needAssign = false;
+    needReverse = false;
 
     update();
 }
@@ -94,6 +102,11 @@ void TreapNode::push() {
         addValue(rightChild_, toAdd_);
         toAdd_ = 0;
     }
+    if (needReverse) {
+        reverse(leftChild_);
+        reverse(rightChild_);
+        needReverse = false;
+    }
 }
 
 void TreapNode::addOnSubtree(ValueType value) {
@@ -106,6 +119,12 @@ void TreapNode::assignOnSubtree(ValueType value) {
     toAssign_ = value;
     needAssign = true;
     toAdd_ = 0;
+}
+
+void TreapNode::reverseSubtree() {
+    needReverse = !needReverse;
+    std::swap(leftChild_, rightChild_);
+    update();
 }
 
 void TreapNode::assignLeftChild(TreapNode *newLeftChild) {

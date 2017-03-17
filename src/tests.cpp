@@ -92,6 +92,26 @@ TEST_F(DataStructureTest, AddOnSegmentTest) {
     }
 }
 
+TEST_F(DataStructureTest, ReverseOnSegmentTest) {
+    srand(12509165);
+
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        dataStructure.add(0, 0);
+    }
+
+    int leftBound, rightBound;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        leftBound = rand() % TEST_SIZE;
+        rightBound = rand() % TEST_SIZE;
+
+        if (leftBound > rightBound) {
+            std::swap(leftBound, rightBound);
+        }
+
+        dataStructure.reverseOnSegment(leftBound, rightBound);
+    }
+}
+
 TEST_F(DataStructureTest, AddCorrectness) {
     srand(420);
 
@@ -217,6 +237,36 @@ TEST_F(DataStructureTest, AddOnSegmentCorrectness) {
     }
 }
 
+TEST_F(DataStructureTest, ReverseOnSegmentCorrectness) {
+    srand(12509165);
+
+    ValueType newElement;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        newElement = rand();
+        dataStructure.add(newElement, count);
+        values.push_back(newElement);
+    }
+
+    int leftBound, rightBound;
+    for (int count = 0; count < TEST_SIZE; ++count) {
+        leftBound = rand() % TEST_SIZE;
+        rightBound = rand() % TEST_SIZE;
+
+        if (leftBound > rightBound) {
+            std::swap(leftBound, rightBound);
+        }
+
+        dataStructure.reverseOnSegment(leftBound, rightBound);
+        for (int index = leftBound; index < (leftBound + rightBound + 1) / 2; ++index) {
+            std::swap(values[index], values[rightBound + leftBound - index]);
+        }
+    }
+
+    for (int index = 0; index < TEST_SIZE; ++index) {
+        EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+    }
+}
+
 TEST_F(DataStructureTest, CombinedTest) {
     srand(73);
 
@@ -224,7 +274,7 @@ TEST_F(DataStructureTest, CombinedTest) {
     for (int count = 0; count < TEST_SIZE; ++count) {
         newValue = rand();
         dataStructure.add(newValue, count);
-        values.push_back(0);
+        values.push_back(newValue);
     }
 
     ValueType deltaValue;
@@ -232,7 +282,7 @@ TEST_F(DataStructureTest, CombinedTest) {
     for (int count = 0; count < TEST_SIZE; ++count) {
         leftBound = rand() % TEST_SIZE;
         rightBound = rand() % TEST_SIZE;
-        operationType = rand() % 2;
+        operationType = rand() % 3;
 
         if (leftBound > rightBound) {
             std::swap(leftBound, rightBound);
@@ -244,11 +294,16 @@ TEST_F(DataStructureTest, CombinedTest) {
             for (int index = leftBound; index <= rightBound; ++index) {
                 values[index] += deltaValue;
             }
-        } else {
+        } else if (operationType == 2) {
             newValue = rand();
             dataStructure.assignOnSegment(newValue, leftBound, rightBound);
             for (int index = leftBound; index <= rightBound; ++index) {
                 values[index] = newValue;
+            }
+        } else {
+            dataStructure.reverseOnSegment(leftBound, rightBound);
+            for (int index = leftBound; index < (leftBound + rightBound + 1) / 2; ++index) {
+                std::swap(values[index], values[rightBound + leftBound - index]);
             }
         }
     }

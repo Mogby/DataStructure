@@ -56,6 +56,8 @@ public:
 
     void assignOnSegment(ValueType value, int leftBound, int rightBound);
 
+    void reverseOnSegment(int leftBound, int rightBound);
+
     void remove(int index);
 
     ValueType getSum(int leftBound, int rightBound);
