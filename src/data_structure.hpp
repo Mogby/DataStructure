@@ -59,9 +59,7 @@ public:
 
     void reverseOnSegment(int leftBound, int rightBound);
 
-    void nextPermutationOnSegment(int leftBound, int rightBound);
-
-    void previousPermutationOnSegment(int leftBound, int rightBound);
+    void movePermutationOnSegment(int leftBound, int rightBound, bool nextPermutation);
 
     void remove(int index);
 

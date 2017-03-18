@@ -7,6 +7,12 @@
 #include <iostream>
 #include "typedefs.hpp"
 
+namespace Utility {
+
+    bool checkUnstrictOrder(ValueType value1, ValueType value2, bool ascendingOrder);
+
+}
+
 class TreapNode {
 private:
 
@@ -46,9 +52,7 @@ public:
 
     static ValueType getRightmostValue(const TreapNode *node, ValueType defaultValue);
 
-    static bool isAscending(const TreapNode *node, bool defaultValue);
-
-    static bool isDescending(const TreapNode *node, bool defaultValue);
+    static bool isMonotonous(const TreapNode *node, bool defaultValue, bool checkAscending);
 
     TreapNode();
 

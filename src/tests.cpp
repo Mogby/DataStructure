@@ -114,21 +114,23 @@ TEST_F(DataStructureTest, ReverseOnSegmentTest) {
     }
 }
 
-TEST_F(DataStructureTest, NextPermutationOnSegmentTest) {
+TEST_F(DataStructureTest, MovePermutationOnSegmentTest) {
     srand(9000);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
         dataStructure.add(rand(), count);
     }
 
+    bool nextPermutation;
     int leftBound, size, iterations;
     for (int count = 0; count < TEST_SIZE; ++count) {
         leftBound = rand() % (TEST_SIZE - 6);
         size = rand() % 6 + 1;
         iterations = rand() % 10 + 1;
 
+        nextPermutation = rand() & 1;
         for (int iterationsCount = 0; iterationsCount < iterations; ++iterationsCount) {
-            dataStructure.nextPermutationOnSegment(leftBound, leftBound + size - 1);
+            dataStructure.movePermutationOnSegment(leftBound, leftBound + size - 1, nextPermutation);
         }
     }
 }
@@ -334,19 +336,29 @@ TEST_F(DataStructureTest, CombinedCorrectness) {
     }
 }
 
-TEST_F(DataStructureTest, NextPermutationCorrectness) {
+TEST_F(DataStructureTest, MovePermutationCorrectness) {
     int testSize = 6;
-    int permutationsCount = 719;
+    int permutationsCount = 720;
 
     for (ValueType count = 0; count < testSize; ++count) {
-        dataStructure.add(count, count);
+        dataStructure.add(count, static_cast<uint>(count));
         values.push_back(count);
     }
 
     for (int iteration = 0; iteration < permutationsCount; ++iteration) {
-        dataStructure.nextPermutationOnSegment(0, testSize - 1);
+        dataStructure.movePermutationOnSegment(0, testSize - 1, true);
 
         std::next_permutation(values.begin(), values.end());
+
+        for (int index = 0; index < testSize; ++index) {
+            EXPECT_EQ(values[index], dataStructure.getSum(index, index));
+        }
+    }
+
+    for (int iteration = 0; iteration < permutationsCount; ++iteration) {
+        dataStructure.movePermutationOnSegment(0, testSize - 1, false);
+
+        std::prev_permutation(values.begin(), values.end());
 
         for (int index = 0; index < testSize; ++index) {
             EXPECT_EQ(values[index], dataStructure.getSum(index, index));

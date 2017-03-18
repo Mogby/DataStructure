@@ -48,27 +48,15 @@ public:
 
 };
 
-class AscendingSplit : public SplitPredicate {
+class MonotonousSplit : public SplitPredicate {
 private:
 
+    bool ascendingSplit_;
     bool alwaysFalse_;
 
 public:
 
-    AscendingSplit() : alwaysFalse_(false) {}
-
-    virtual bool operator()(const TreapNode &node) override;
-
-};
-
-class DescendingSplit : public SplitPredicate {
-private:
-
-    bool alwaysFalse_;
-
-public:
-
-    DescendingSplit() : alwaysFalse_(false) {}
+    MonotonousSplit(bool ascendingSplit) : ascendingSplit_(ascendingSplit), alwaysFalse_(false) {}
 
     virtual bool operator()(const TreapNode &node) override;
 

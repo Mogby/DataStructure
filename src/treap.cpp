@@ -2,6 +2,10 @@
 
 #include <utility>
 
+bool Utility::checkUnstrictOrder(ValueType value1, ValueType value2, bool ascendingOrder) {
+    return value1 == value2 || value1 < value2 == ascendingOrder;
+}
+
 void TreapNode::addValue(TreapNode *node, ValueType value) {
     if (node) {
         node->addOnSubtree(value);
@@ -24,13 +28,23 @@ bool TreapNode::checkMonotonous(const TreapNode *leftNode, ValueType value, cons
     if (leftNode && !leftNode->isMonotonous_ || rightNode && !rightNode->isMonotonous_)
         return false;
 
-    ValueType leftmostValue = TreapNode::getLeftmostValue(leftNode, value_);
-    ValueType leftValue = TreapNode::getRightmostValue(leftNode, value_);
-    ValueType rightValue = TreapNode::getLeftmostValue(rightNode, value_);
-    ValueType rightmostValue = TreapNode::getRightmostValue(rightNode, value_);
+    ValueType leftmostValue = TreapNode::getLeftmostValue(leftNode, value);
+    ValueType leftValue = TreapNode::getRightmostValue(leftNode, value);
+    ValueType rightValue = TreapNode::getLeftmostValue(rightNode, value);
+    ValueType rightmostValue = TreapNode::getRightmostValue(rightNode, value);
 
-    return leftmostValue <= leftValue && leftValue <= value && value <= rightValue && rightValue <= rightmostValue ||
-           leftmostValue >= leftValue && leftValue >= value && value >= rightValue && rightValue >= rightmostValue;
+    bool checkAscending = true;
+    for (int testsCount = 0; testsCount < 2; ++testsCount) {
+        if (Utility::checkUnstrictOrder(leftmostValue, leftValue, checkAscending) &&
+                Utility::checkUnstrictOrder(leftValue, value, checkAscending) &&
+                Utility::checkUnstrictOrder(value, rightValue, checkAscending) &&
+                Utility::checkUnstrictOrder(rightValue, rightmostValue, checkAscending)) {
+            return true;
+        }
+        checkAscending = !checkAscending;
+    }
+
+    return false;
 }
 
 ValueType TreapNode::getSum(const TreapNode *node) {
@@ -49,12 +63,11 @@ ValueType TreapNode::getRightmostValue(const TreapNode *node, ValueType defaultV
     return node ? node->rightmostValue_ : defaultValue;
 }
 
-bool TreapNode::isAscending(const TreapNode *node, bool defaultValue) {
-    return node ? node->isMonotonous_ && node->leftmostValue_ <= node->rightmostValue_ : defaultValue;
-}
-
-bool TreapNode::isDescending(const TreapNode *node, bool defaultValue) {
-    return node ? node->isMonotonous_ && node->leftmostValue_ >= node->rightmostValue_ : defaultValue;
+bool TreapNode::isMonotonous(const TreapNode *node, bool defaultValue, bool checkAscending) {
+    return node ? node->isMonotonous_ &&
+            Utility::checkUnstrictOrder(node->leftmostValue_,
+                                        node->rightmostValue_,
+                                        checkAscending) : defaultValue;
 }
 
 TreapNode::TreapNode() : TreapNode(0) {}

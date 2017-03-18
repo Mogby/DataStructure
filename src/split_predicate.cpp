@@ -12,42 +12,27 @@ void ImplicitKeySplit::goRight(const TreapNode &node) {
 ImplicitKeySplit::ImplicitKeySplit(int key) : key_(key) {}
 
 bool ExplicitKeySplit::operator()(const TreapNode &node) {
-    return node.getValue() != key_ && (node.getValue() > key_ == ascendingTree_);
+    return !Utility::checkUnstrictOrder(node.getValue(), key_, ascendingTree_);
 }
 
 ExplicitKeySplit::ExplicitKeySplit(ValueType key, bool ascendingTree) : key_(key), ascendingTree_(ascendingTree) {}
 
-bool AscendingSplit::operator()(const TreapNode &node) {
+bool MonotonousSplit::operator()(const TreapNode &node) {
     if (alwaysFalse_) {
         return false;
     }
 
-    if (!TreapNode::isAscending(node.getRightChild(), true) ||
-        node.getValue() > TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
+    if (!TreapNode::isMonotonous(node.getRightChild(), true, ascendingSplit_) ||
+        !Utility::checkUnstrictOrder(node.getValue(),
+                                     TreapNode::getLeftmostValue(node.getRightChild(), node.getValue()),
+                                     ascendingSplit_)) {
         return false;
     }
 
-    if (TreapNode::getLeftmostValue(node.getLeftChild(), node.getValue()) > node.getValue()) {
+    if (!Utility::checkUnstrictOrder(TreapNode::getRightmostValue(node.getLeftChild(), node.getValue()),
+                                     node.getValue(), ascendingSplit_)) {
         alwaysFalse_ = true;
     }
 
     return true;
-}
-
-bool DescendingSplit::operator()(const TreapNode &node) {
-    if (alwaysFalse_) {
-        return false;
-    }
-
-    if (!TreapNode::isDescending(node.getRightChild(), true) ||
-        node.getValue() < TreapNode::getLeftmostValue(node.getRightChild(), node.getValue())) {
-        return false;
-    }
-
-    if (TreapNode::getRightmostValue(node.getLeftChild(), node.getValue()) < node.getValue()) {
-        alwaysFalse_ = true;
-    }
-
-    return true;
-
 }
