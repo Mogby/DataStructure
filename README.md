@@ -18,5 +18,8 @@ given an array of __N__ elements, can do the following in _O(log n)_:
 Create project file with cmake and then build it with your favorite
 build system. 
 
-__MOST LIKELY YOU'LL HAVE TO REBUILD GOOGLE TESTS 
+You can build the whole project with tests or just the library 
+(the data\_structure target).
+
+__MOST LIKELY YOU'LL HAVE TO REBUILD GOOGLE TEST
 FOR YOUR SYSTEM AND EDIT CMakeLists.txt TO MATCH NEW FILES__
