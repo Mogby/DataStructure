@@ -124,11 +124,19 @@ void TreapNode::push() {
 
 void TreapNode::addOnSubtree(ValueType value) {
     value_ += value;
+    sum_ += value * size_;
+    leftmostValue_ += value;
+    rightmostValue_ += value;
+
     toAdd_ += value;
 }
 
 void TreapNode::assignOnSubtree(ValueType value) {
     value_ = value;
+    sum_ = value * size_;
+    leftmostValue_ = value;
+    rightmostValue_ = value;
+
     toAssign_ = value;
     needAssign = true;
     toAdd_ = 0;
