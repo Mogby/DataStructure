@@ -60,13 +60,34 @@ DataStructure::NodeTriplet DataStructure::splitTwice(TreapNode *treap, int leftI
     return NodeTriplet(secondCut.left, secondCut.right, firstCut.right);
 }
 
+void DataStructure::movePermutationOnSegment(int leftBound, int rightBound, bool nextPermutation) {
+    NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
+
+    if (!TreapNode::isMonotonous(segments.middle, true, !nextPermutation)) {
+        NodePair segmentParts = split(segments.middle, MonotonousSplit(!nextPermutation));
+        NodePair swapFrom = split(segmentParts.left, ImplicitKeySplit(TreapNode::getSize(segmentParts.left) - 2));
+        NodePair swapTo = split(segmentParts.right,
+                                ExplicitKeySplit(swapFrom.right->getValue() + (nextPermutation ? 1 : -1),
+                                                 !nextPermutation));
+        NodePair newElement = split(swapTo.left, ImplicitKeySplit(TreapNode::getSize(swapTo.left) - 2));
+
+        segments.middle = merge(newElement.left, swapFrom.right, swapTo.right);
+        segments.middle->reverseSubtree();
+        segments.middle = merge(swapFrom.left, newElement.right, segments.middle);
+    } else {
+        segments.middle->reverseSubtree();
+    }
+
+    treap_ = merge(segments.left, segments.middle, segments.right);
+}
+
 DataStructure::DataStructure() : treap_(nullptr) {}
 
 DataStructure::~DataStructure() {
     delete treap_;
 }
 
-void DataStructure::add(ValueType value, int index) {
+void DataStructure::insert(ValueType value, int index) {
     TreapNode *newNode = new TreapNode(value);
 
     NodePair cut = split(treap_, ImplicitKeySplit(index - 1));
@@ -97,6 +118,14 @@ void DataStructure::reverseOnSegment(int leftBound, int rightBound) {
     treap_ = merge(segments.left, segments.middle, segments.right);
 }
 
+void DataStructure::nextPermutationOnSegment(int leftBound, int rightBound) {
+    movePermutationOnSegment(leftBound, rightBound, true);
+}
+
+void DataStructure::previousPermutationOnSegment(int leftBound, int rightBound) {
+    movePermutationOnSegment(leftBound, rightBound, false);
+}
+
 void printNode(TreapNode *node) {
     if (node) {
         std::cout << *node << "; ";
@@ -105,28 +134,7 @@ void printNode(TreapNode *node) {
     }
 }
 
-void DataStructure::movePermutationOnSegment(int leftBound, int rightBound, bool nextPermutation) {
-    NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
-
-    if (!TreapNode::isMonotonous(segments.middle, true, !nextPermutation)) {
-        NodePair segmentParts = split(segments.middle, MonotonousSplit(!nextPermutation));
-        NodePair swapFrom = split(segmentParts.left, ImplicitKeySplit(TreapNode::getSize(segmentParts.left) - 2));
-        NodePair swapTo = split(segmentParts.right,
-                                ExplicitKeySplit(swapFrom.right->getValue() + (nextPermutation ? 1 : -1),
-                                                 !nextPermutation));
-        NodePair newElement = split(swapTo.left, ImplicitKeySplit(TreapNode::getSize(swapTo.left) - 2));
-
-        segments.middle = merge(newElement.left, swapFrom.right, swapTo.right);
-        segments.middle->reverseSubtree();
-        segments.middle = merge(swapFrom.left, newElement.right, segments.middle);
-    } else {
-        segments.middle->reverseSubtree();
-    }
-
-    treap_ = merge(segments.left, segments.middle, segments.right);
-}
-
-void DataStructure::remove(int index) {
+void DataStructure::erase(int index) {
     NodeTriplet segments = splitTwice(treap_, index, index);
 
     delete segments.middle;

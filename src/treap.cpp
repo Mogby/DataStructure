@@ -1,5 +1,6 @@
 #include "treap.hpp"
 
+#include <cstdlib>
 #include <utility>
 
 bool Utility::checkUnstrictOrder(ValueType value1, ValueType value2, bool ascendingOrder) {

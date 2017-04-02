@@ -24,7 +24,7 @@ TEST_F(DataStructureTest, AddTest) {
     srand(1337);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(rand(), rand() % (count + 1));
+        dataStructure.insert(rand(), rand() % (count + 1));
     }
 }
 
@@ -36,7 +36,7 @@ TEST_F(DataStructureTest, GetSumTest) {
     for (int count = 0; count < TEST_SIZE; ++count) {
         newElement = rand();
         sum += newElement;
-        dataStructure.add(newElement, count);
+        dataStructure.insert(newElement, count);
     }
 
     EXPECT_EQ(sum, dataStructure.getSum(0, TEST_SIZE));
@@ -46,11 +46,11 @@ TEST_F(DataStructureTest, RemoveTest) {
     srand(0511);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(rand(), count);
+        dataStructure.insert(rand(), count);
     }
 
     for (int count = TEST_SIZE; count > 0; --count) {
-        dataStructure.remove(rand() % count);
+        dataStructure.erase(rand() % count);
     }
 }
 
@@ -58,7 +58,7 @@ TEST_F(DataStructureTest, AssignOnSegmentTest) {
     srand(3);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(0, 0);
+        dataStructure.insert(0, 0);
     }
 
     int leftBound, rightBound;
@@ -78,7 +78,7 @@ TEST_F(DataStructureTest, AddOnSegmentTest) {
     srand(73);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(0, 0);
+        dataStructure.insert(0, 0);
     }
 
     int leftBound, rightBound;
@@ -98,7 +98,7 @@ TEST_F(DataStructureTest, ReverseOnSegmentTest) {
     srand(12509165);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(0, 0);
+        dataStructure.insert(0, 0);
     }
 
     int leftBound, rightBound;
@@ -118,7 +118,7 @@ TEST_F(DataStructureTest, MovePermutationOnSegmentTest) {
     srand(9000);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(rand(), count);
+        dataStructure.insert(rand(), count);
     }
 
     bool nextPermutation;
@@ -144,7 +144,7 @@ TEST_F(DataStructureTest, AddCorrectness) {
         newElement = rand();
         insertIndex = rand() % (count + 1);
 
-        dataStructure.add(newElement, insertIndex);
+        dataStructure.insert(newElement, insertIndex);
         values.insert(values.begin() + insertIndex, newElement);
     }
 
@@ -162,7 +162,7 @@ TEST_F(DataStructureTest, RemoveCorrectness) {
         newElement = rand();
         insertIndex = rand() % (count + 1);
 
-        dataStructure.add(newElement, insertIndex);
+        dataStructure.insert(newElement, insertIndex);
         values.insert(values.begin() + insertIndex, newElement);
     }
 
@@ -170,7 +170,7 @@ TEST_F(DataStructureTest, RemoveCorrectness) {
     for (int count = TEST_SIZE - 1; count > 0; --count) {
         eraseIndex = rand() % count;
         values.erase(values.begin() + eraseIndex);
-        dataStructure.remove(eraseIndex);
+        dataStructure.erase(eraseIndex);
 
         for (int index = 0; index < count; ++index) {
             EXPECT_EQ(values[index], dataStructure.getSum(index, index));
@@ -189,7 +189,7 @@ TEST_F(DataStructureTest, GetSumCorrectness) {
         if (count) {
             values[values.size() - 1] += values[values.size() - 2];
         }
-        dataStructure.add(newElement, count);
+        dataStructure.insert(newElement, count);
     }
 
     for (int leftBound = 0; leftBound < TEST_SIZE; ++leftBound) {
@@ -204,7 +204,7 @@ TEST_F(DataStructureTest, AssignOnSegmentCorrectness) {
     srand(3);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(0, 0);
+        dataStructure.insert(0, 0);
         values.push_back(0);
     }
 
@@ -234,7 +234,7 @@ TEST_F(DataStructureTest, AddOnSegmentCorrectness) {
     srand(73);
 
     for (int count = 0; count < TEST_SIZE; ++count) {
-        dataStructure.add(0, 0);
+        dataStructure.insert(0, 0);
         values.push_back(0);
     }
 
@@ -266,7 +266,7 @@ TEST_F(DataStructureTest, ReverseOnSegmentCorrectness) {
     ValueType newElement;
     for (int count = 0; count < TEST_SIZE; ++count) {
         newElement = rand();
-        dataStructure.add(newElement, count);
+        dataStructure.insert(newElement, count);
         values.push_back(newElement);
     }
 
@@ -296,7 +296,7 @@ TEST_F(DataStructureTest, CombinedCorrectness) {
     ValueType newValue;
     for (int count = 0; count < TEST_SIZE; ++count) {
         newValue = rand();
-        dataStructure.add(newValue, count);
+        dataStructure.insert(newValue, count);
         values.push_back(newValue);
     }
 
@@ -341,7 +341,7 @@ TEST_F(DataStructureTest, MovePermutationCorrectness) {
     int permutationsCount = 720;
 
     for (ValueType count = 0; count < testSize; ++count) {
-        dataStructure.add(count, static_cast<uint>(count));
+        dataStructure.insert(count, static_cast<uint>(count));
         values.push_back(count);
     }
 

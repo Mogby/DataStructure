@@ -45,13 +45,15 @@ private:
 
     NodeTriplet splitTwice(TreapNode *treap, int leftIndex, int rightIndex);
 
+    void movePermutationOnSegment(int leftBound, int rightBound, bool nextPermutation);
+
 public:
 
     DataStructure();
 
     ~DataStructure();
 
-    void add(ValueType value, int index);
+    void insert(ValueType value, int index);
 
     void addOnSegment(ValueType value, int leftBound, int rightBound);
 
@@ -59,9 +61,11 @@ public:
 
     void reverseOnSegment(int leftBound, int rightBound);
 
-    void movePermutationOnSegment(int leftBound, int rightBound, bool nextPermutation);
+    void nextPermutationOnSegment(int leftBound, int rightBound);
 
-    void remove(int index);
+    void previousPermutationOnSegment(int leftBound, int rightBound);
+
+    void erase(int index);
 
     ValueType getSum(int leftBound, int rightBound);
 
