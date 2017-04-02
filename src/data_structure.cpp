@@ -142,6 +142,10 @@ void DataStructure::erase(int index) {
     treap_ = merge(segments.left, segments.right);
 }
 
+int DataStructure::getSize() const {
+    return TreapNode::getSize(treap_);
+}
+
 ValueType DataStructure::getSum(int leftBound, int rightBound) {
     NodeTriplet segments = splitTwice(treap_, leftBound, rightBound);
 

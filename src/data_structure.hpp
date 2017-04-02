@@ -67,6 +67,8 @@ public:
 
     void erase(int index);
 
+    int getSize() const;
+
     ValueType getSum(int leftBound, int rightBound);
 
     void printSegment(std::ostream &output, int leftBound, int rightBound);
