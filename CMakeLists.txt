@@ -16,4 +16,4 @@ add_library(data_structure ${SOURCE_FILES})
 add_executable(task ${TASK_FILES})
 
 #target_link_libraries(tests data_structure libgtest_main.a libgtest.a pthread)
-target_link_libraries(task data_structure)
+#target_link_libraries(task data_structure)
